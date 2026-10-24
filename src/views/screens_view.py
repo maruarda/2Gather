@@ -1,17 +1,23 @@
 ﻿import pygame
 
-from src.config import CHAO_Y, COR_PAINEL, COR_TEXTO, COR_TEXTO_SUAVE, LARGURA
+from src import config
+from src.config import CHAO_Y, COR_TEXTO, COR_TEXTO_SUAVE, LARGURA
 from src.models.lixeiras import LIXEIRAS
+
+COR_TEXTO_MURAL = (43, 24, 12)
 
 
 class ScreensView:
     def __init__(self, tela, recursos):
         self.tela = tela
         self.recursos = recursos
-        self.fonte_titulo = pygame.font.Font('fontes/Stardew_Valley.ttf', 54)
+        self.fonte_game_over = pygame.font.Font('fontes/Stardew_Valley.ttf', config.TAMANHO_FONTE_GAME_OVER)
+        self.fonte_pontuacao_final = pygame.font.Font('fontes/Starshines.ttf', config.TAMANHO_FONTE_PONTUACAO_FINAL)
         self.fonte = pygame.font.Font('fontes/Starshines.ttf', 28)
         self.fonte_pequena = pygame.font.Font('fontes/Stardew_Valley.ttf', 21)
-        self.botao_voltar = pygame.Rect(LARGURA // 2 - 140, CHAO_Y - 70, 280, 46)
+        self.fonte_titulo_informacoes = pygame.font.Font('fontes/Starshines.ttf', 36)
+        self.fonte_informacoes = pygame.font.Font(None, 30)
+        self.botao_voltar = pygame.Rect(LARGURA // 2 - 100, CHAO_Y - 122, 200, 38)
 
     def _texto_centralizado(self, texto, y, fonte, cor=COR_TEXTO, x=None, sombra=False):
         superficie = fonte.render(texto, True, cor)
@@ -21,14 +27,12 @@ class ScreensView:
         self.tela.blit(superficie, destino)
 
     def _painel(self):
-        painel = pygame.Rect(40, 20, LARGURA - 80, CHAO_Y - 40)
-        pygame.draw.rect(self.tela, COR_PAINEL, painel, border_radius=18)
-        pygame.draw.rect(self.tela, (54, 68, 93), painel, width=2, border_radius=18)
+        self.recursos.desenhar(self.tela, 'imagens/mural.png', pygame.Rect(0, 0, LARGURA, CHAO_Y))
 
     def _botao(self, retangulo, texto):
-        pygame.draw.rect(self.tela, (60, 92, 138), retangulo, border_radius=12)
-        pygame.draw.rect(self.tela, (111, 151, 205), retangulo, width=2, border_radius=12)
-        superficie = self.fonte.render(texto, True, COR_TEXTO)
+        pygame.draw.rect(self.tela, (76, 40, 18), retangulo, border_radius=8)
+        pygame.draw.rect(self.tela, (230, 173, 96), retangulo, width=2, border_radius=8)
+        superficie = self.fonte.render(texto, True, (255, 236, 197))
         self.tela.blit(superficie, superficie.get_rect(center=retangulo.center))
 
     def clicou_voltar(self, posicao):
@@ -45,38 +49,24 @@ class ScreensView:
 
     def desenhar_regras(self, usando_camera=True):
         self._painel()
-        self._texto_centralizado('CATEGORIAS E CONTROLES', 59, self.fonte_titulo)
-        self._desenhar_categorias(168)
+        self._texto_centralizado('Informações', 85, self.fonte_titulo_informacoes, COR_TEXTO_MURAL)
+        self._desenhar_categorias(175)
         linhas = (
-            'Um acerto vale 1; um erro, -1.',
-            '3 resíduos perdidos ou -5 pontos encerram a rodada da dupla.',
-            'As lixeiras movem somente para os lados e nao se atravessam.',
-            'Espaço inicia ou reinicia a rodada.',
-            'P1: A/D; P2: setas esquerda/direita. X ou ESC retorna.',
-        ) if not usando_camera else (
-            'A captura exige contato e a mesma faixa. Um acerto vale +1; um erro, -1.',
-            'Três resíduos perdidos ou -5 pontos encerram a rodada da dupla.',
-            'Movam o corpo para os lados; as lixeiras não se atravessam.',
-            'Agachem juntos para começar. Um jogador pula para abrir/fechar informações.',
-            'Informações: só no início ou GAME OVER. ESC ou Voltar também fecha.',
+            'Acerto +1 ponto',
+            'Erro -1 ponto',
+            'Lixo no chão -1 coração',
         )
         for indice, linha in enumerate(linhas):
-            self._texto_centralizado(linha, CHAO_Y - 210 + indice * 26, self.fonte_pequena)
+            self._texto_centralizado(linha, 270 + indice * 30, self.fonte_informacoes, COR_TEXTO_MURAL)
         self._botao(self.botao_voltar, 'Voltar')
 
     def _desenhar_categorias(self, y):
         for indice, classe in enumerate(LIXEIRAS):
-            x = 112 + indice * 144
-            cartao = pygame.Rect(x - 66, y - 36, 132, 112)
-            pygame.draw.rect(self.tela, (32, 41, 58), cartao, border_radius=9)
-            imagem = pygame.Rect(x - 22, y - 28, 44, 34)
+            x = LARGURA // 2 + (indice - (len(LIXEIRAS) - 1) / 2) * 110
+            imagem = pygame.Rect(x - 40, y - 40, 80, 80)
             self.recursos.desenhar(self.tela, classe.IMAGEM, imagem)
-            nome = pygame.font.Font('fontes/Starshines.ttf', 20).render(classe.NOME, True, COR_TEXTO)
-            self.tela.blit(nome, nome.get_rect(center=(x, y + 13)))
-            fonte = pygame.font.Font('fontes/Stardew_Valley.ttf', 15)
-            for linha, item in enumerate(classe.ITENS[:2]):
-                texto = fonte.render(item.nome, True, COR_TEXTO_SUAVE)
-                self.tela.blit(texto, texto.get_rect(center=(x, y + 35 + linha * 17)))
+            self._texto_centralizado(classe.NOME.capitalize(), y + 55,
+                                     self.fonte_informacoes, COR_TEXTO_MURAL, x=x)
 
     def desenhar_calibracao(self, progresso=0.0, status=None, usando_camera=True, aviso=''):
         self.desenhar_menu(usando_camera)
@@ -85,5 +75,7 @@ class ScreensView:
         self._texto_centralizado(str(numero), CHAO_Y // 2, pygame.font.Font('fontes/Starshines.ttf', 144), sombra=True)
 
     def desenhar_fim(self, pontuacao):
-        self._texto_centralizado('GAME OVER', CHAO_Y // 2 - 28, self.fonte_titulo, sombra=True)
-        self._texto_centralizado(f'Pontuação: {pontuacao}', CHAO_Y // 2 + 28, self.fonte, sombra=True)
+        self.recursos.desenhar(self.tela, 'imagens/final.png', pygame.Rect(20, 20, LARGURA - 40, CHAO_Y - 40))
+        self._texto_centralizado('GAME OVER', CHAO_Y // 2 - 40, self.fonte_game_over, config.COR_GAME_OVER)
+        self._texto_centralizado(f'Pontuação: {pontuacao}', CHAO_Y // 2 + 30,
+                                 self.fonte_pontuacao_final, config.COR_PONTUACAO_FINAL)

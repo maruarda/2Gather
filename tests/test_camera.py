@@ -211,6 +211,7 @@ class CameraInputTests(unittest.TestCase):
         self.assertIsNone(self.entrada.erro)
         self.assertTrue(self.ler_quadro(agora + 0.6).prontos)
 
+    @patch('src.controllers.input.camera_input.CAMERA_DESENHAR_LANDMARKS', False)
     def test_preview_updates_while_pose_sample_is_unchanged(self):
         agora = self.calibrar()
         frame = np.zeros((480, 640, 3), dtype=np.uint8)

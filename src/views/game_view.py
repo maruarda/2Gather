@@ -26,6 +26,8 @@ class GameView:
             self.telas.desenhar_regras(config.USAR_CAMERA)
         elif model.estado == model.CALIBRANDO:
             self.telas.desenhar_calibracao(usando_camera=config.USAR_CAMERA)
+        elif model.estado == model.FIM:
+            self.telas.desenhar_fim(model.pontuacao)
         else:
             self.tela.set_clip(pygame.Rect(0, 0, LARGURA, CHAO_Y))
             for jogador in model.jogadores:
@@ -33,12 +35,9 @@ class GameView:
             for item in model.itens:
                 self.desenhar_item(item)
             self.tela.set_clip(None)
-            if model.estado == model.FIM:
-                self.telas.desenhar_fim(model.pontuacao)
-            else:
-                self.hud.desenhar(model)
-                if model.estado == model.CONTAGEM:
-                    self.telas.desenhar_contagem(model.numero_contagem)
+            self.hud.desenhar(model)
+            if model.estado == model.CONTAGEM:
+                self.telas.desenhar_contagem(model.numero_contagem)
         pygame.display.flip()
 
     def _desenhar_cenario(self, fundo):

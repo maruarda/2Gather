@@ -145,16 +145,22 @@ class RenderizacaoTests(unittest.TestCase):
             self.assertEqual(terceiro.get_at((0, 0))[:3], (255, 0, 0))
             self.assertIs(primeiro, terceiro)
 
-    def test_gameplay_draws_only_players_and_falling_items(self):
+    def test_gameplay_draws_players_items_and_hearts_for_remaining_lives(self):
         tela = pygame.Surface((LARGURA, ALTURA))
         view = GameView(tela)
         model = GameModel()
         model.iniciar()
         model.update(3)
-        with patch.object(view.recursos, 'desenhar', wraps=view.recursos.desenhar) as desenhar:
-            view.render(model)
-        caminhos = [chamada.args[1] for chamada in desenhar.call_args_list]
-        self.assertEqual(caminhos, [j.IMAGEM for j in model.jogadores] + [i.imagem for i in model.itens])
+        cenario = [j.IMAGEM for j in model.jogadores] + [i.imagem for i in model.itens]
+        for perdidos, coracoes in ((0, 'VVV'), (1, 'VVP'), (2, 'VPP'), (3, 'PPP'), (0, 'VVV')):
+            with self.subTest(perdidos=perdidos):
+                model.itens_perdidos = perdidos
+                with patch.object(view.recursos, 'desenhar', wraps=view.recursos.desenhar) as desenhar:
+                    view.render(model)
+                caminhos = [chamada.args[1] for chamada in desenhar.call_args_list]
+                self.assertEqual(caminhos, cenario + [f'imagens/coracao{tipo}.png' for tipo in coracoes])
+                for chamada in desenhar.call_args_list[-3:]:
+                    self.assertTrue(pygame.Rect(LARGURA - 180, 0, 180, 70).contains(chamada.args[2]))
 
     def test_custom_item_size_renders_without_label_above_it(self):
         tela = pygame.Surface((LARGURA, ALTURA))
@@ -170,7 +176,7 @@ class RenderizacaoTests(unittest.TestCase):
         area_item = tela.subsurface((284, 100, 32, 52))
         self.assertNotEqual(pygame.image.tobytes(area_item, 'RGB'), bytes((70, 80, 90)) * 32 * 52)
 
-    def test_game_over_keeps_scene_and_only_adds_title_and_score(self):
+    def test_game_over_shows_final_image_with_title_and_score(self):
         tela = pygame.Surface((LARGURA, ALTURA))
         view = GameView(tela)
         model = GameModel()
@@ -182,9 +188,11 @@ class RenderizacaoTests(unittest.TestCase):
         model.update(5)
         with patch.object(view.telas, '_texto_centralizado', wraps=view.telas._texto_centralizado) as texto, \
                 patch.object(view.telas, '_painel') as painel, \
+                patch.object(view.recursos, 'desenhar', wraps=view.recursos.desenhar) as desenhar, \
                 patch.object(view.hud, 'desenhar') as hud:
             view.render(model)
         self.assertEqual([chamada.args[0] for chamada in texto.call_args_list], ['GAME OVER', 'Pontuação: 12'])
+        self.assertEqual([chamada.args[1] for chamada in desenhar.call_args_list], ['imagens/final.png'])
         painel.assert_not_called()
         hud.assert_not_called()
         self.assertIs(model.fundo, fundo)

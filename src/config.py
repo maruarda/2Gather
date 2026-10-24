@@ -11,9 +11,13 @@ COR_PAINEL = (29, 38, 57)
 COR_TEXTO = (238, 243, 250)
 COR_TEXTO_SUAVE = (160, 174, 194)
 
+TAMANHO_FONTE_GAME_OVER = 84
+COR_GAME_OVER = (90, 42, 21)
+TAMANHO_FONTE_PONTUACAO_FINAL = 36
+COR_PONTUACAO_FINAL = (43, 24, 12)
+
 NUM_PARTICOES = 4
 
-# Lixeiras ancoradas no chão, com tamanho fixo.
 LARGURA_JOGADOR = 112
 ALTURA_JOGADOR = 112
 VELOCIDADE_JOGADOR = 350  
@@ -33,17 +37,15 @@ MAX_ITENS_PERDIDOS = 3
 PONTUACAO_LIMITE_INFERIOR = -5
 TEMPO_CONTAGEM = 3.0
 
-# A dificuldade aumenta a cada faixa de pontos líquidos alcançada.
 PONTOS_POR_NIVEL_DIFICULDADE = 5
 AUMENTO_VELOCIDADE_POR_NIVEL = 10
 REDUCAO_SPAWN_POR_NIVEL = 0.15
 
-# Gestos: descida dos quadris normalizada pela altura da imagem.
 CONFIANCA_GESTOS = 0.5
 LIMIAR_AGACHAMENTO = 0.05
 LIMIAR_PULO = 0.06
 LIMIAR_PES_PULO = 0.04
-VELOCIDADE_MIN_SUBIDA = 0.3  # Altura normalizada por segundo, independente do FPS.
+VELOCIDADE_MIN_SUBIDA = 0.3  
 COOLDOWN_PULO = 0.5
 INTERVALO_MAX_AMOSTRAS_PULO = 0.25
 AMOSTRAS_CALIBRACAO = 30
@@ -51,8 +53,8 @@ OSCILACAO_CALIBRACAO = 0.025
 TEMPO_CONFIRMACAO_GESTO = 0.6
 
 # Entrada e câmera
-USAR_CAMERA = True  # False seleciona teclado; reinicie o programa após alterar.
-CAMERA_INDICE = 0
+USAR_CAMERA = True  
+CAMERA_INDICE = 0  # Índice da webcam usada pelo jogo.
 CAMERA_LARGURA = 640
 CAMERA_ALTURA = 480
 ZONA_CAMERA_MIN = 0.10
@@ -66,11 +68,11 @@ TEMPO_RECUPERACAO_POSE = 0.5
 TOLERANCIA_FRAMES = 10
 CAMERA_MAX_LEITURAS_FALHAS = 60
 CONFIANCA_POSE = 0.5
-# Visibilidade dos landmarks é diferente da confiança do detector MediaPipe.
+
 CONFIANCA_QUADRIS = 0.35
 CONFIANCA_CORPO_COMPLETO = 0.25
-POSE_COMPLEXITY = 0  # Modelo Lite: menor custo de inferência.
-CAMERA_DESENHAR_LANDMARKS = False  # True exibe o esqueleto na prévia da inferência.
+POSE_COMPLEXITY = 0  # Modelo Lite
+CAMERA_DESENHAR_LANDMARKS = True  # True exibe o esqueleto na prévia da inferência.
 CAMERA_MAX_IDADE_POSE = 0.25  # Neutraliza comandos antigos enquanto aguarda nova pose.
 CAMERA_JANELA_NOME = "jogo- câmera"
 PESO_POSICAO = 1.0

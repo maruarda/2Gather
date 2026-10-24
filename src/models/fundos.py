@@ -23,4 +23,5 @@ class FundoPraia(Fundo):
     NOME = 'praia'
     IMAGEM = 'imagens/fundo-praia1.gif'
 
-FUNDOS = (FundoSimples, FundoDecorado, FundoPraia)
+FUNDOS = (FundoPraia, FundoPraia, FundoPraia)
+
