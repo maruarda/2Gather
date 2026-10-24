@@ -12,4 +12,5 @@ class LixeiraPlastico(Lixeira):
         Residuo('plastico_pet2', 'Garrafa PET Refrigerante', 'imagens/coquinha.png', tamanho=(50, 84)),
         Residuo('plastico_frasco', 'Frasco plástico', 'imagens/qboinha.png', tamanho=(64, 84)),
         Residuo('plastico_cd', 'CD', 'imagens/cd-lixo1.png', tamanho=(52, 52)),
+        Residuo('plastico_sacola', 'Sacola plástica', 'imagens/sacola.png', tamanho=(64, 64))
     )

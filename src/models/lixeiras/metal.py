@@ -11,4 +11,6 @@ class LixeiraMetal(Lixeira):
         Residuo('metal_lata', 'Lata de conserva', 'imagens/lixo-lata2.png', tamanho=(48, 56)),
         Residuo('metal_refri', 'Lata de refrigerante', 'imagens/lata-refri.png', tamanho=(38, 48)),
         Residuo('metal_latinha', 'Lata de bebida', 'imagens/outro-refri-lata.png', tamanho=(38, 48)),
+        Residuo('metal_copo1', 'Copo de metal', 'imagens/copo-da-vi.png', tamanho=(64, 64)),
+        Residuo('metal_copo2', 'Copo de metal', 'imagens/copo-da-o.png', tamanho=(64, 64))
     )
