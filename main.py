@@ -1,5 +1,6 @@
 ﻿import argparse
 import logging
+from pathlib import Path
 import sys
 
 import pygame
@@ -22,6 +23,8 @@ def main(argv=None):
     pygame.init()
     fonte_entrada = None
     try:
+        icone = Path(__file__).resolve().parent / 'imagens' / 'logo1.png'
+        pygame.display.set_icon(pygame.image.load(str(icone)))
         tela = pygame.display.set_mode((config.LARGURA, config.ALTURA))
         fonte_entrada = criar_fonte_entrada()
         controller = GameController(tela, fonte_entrada)

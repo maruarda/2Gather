@@ -54,7 +54,7 @@ TEMPO_CONFIRMACAO_GESTO = 0.6
 
 # Entrada e câmera
 USAR_CAMERA = True  
-CAMERA_INDICE = 0  # Índice da webcam usada pelo jogo.
+CAMERA_INDICE = 0  
 CAMERA_LARGURA = 640
 CAMERA_ALTURA = 480
 ZONA_CAMERA_MIN = 0.10
@@ -72,8 +72,8 @@ CONFIANCA_POSE = 0.5
 CONFIANCA_QUADRIS = 0.35
 CONFIANCA_CORPO_COMPLETO = 0.25
 POSE_COMPLEXITY = 0  # Modelo Lite
-CAMERA_DESENHAR_LANDMARKS = True  # True exibe o esqueleto na prévia da inferência.
-CAMERA_MAX_IDADE_POSE = 0.25  # Neutraliza comandos antigos enquanto aguarda nova pose.
+CAMERA_DESENHAR_LANDMARKS = True  # True exibe o esqueleto mediapipe
+CAMERA_MAX_IDADE_POSE = 0.25
 CAMERA_JANELA_NOME = "jogo- câmera"
 PESO_POSICAO = 1.0
 PESO_TAMANHO = 0.5
